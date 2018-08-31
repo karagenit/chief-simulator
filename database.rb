@@ -30,6 +30,11 @@ class Database
   end
 
   def get_post(post_id)
+    @db.execute("SELECT text FROM posts WHERE id=?")[0][0]
+  end
+
+  def get_post_count
+    @db.execute("SELECT COUNT(*) FROM posts")
   end
 
   def post_exists?(post_id)

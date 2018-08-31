@@ -58,3 +58,8 @@ task :generate do # rake generate count=3
         puts ''
     end
 end
+
+task :size do
+    db = Database.new
+    puts db.get_post_count
+end
