@@ -3,6 +3,7 @@ require 'sqlite3'
 class Database
   def initialize
     @db = SQLite3::Database.new 'chief.db'
+    @db.busy_timeout 2000
   end
 
   def create

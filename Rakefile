@@ -26,20 +26,26 @@ task :download do
     db = Database.new
     start_cnt = (ENV['start'] || (db.get_last_id + 1)).to_i
     end_cnt = (ENV['end'] || 1800000).to_i
+    thread_cnt = (ENV['threads'] || 8).to_i
 
-    (start_cnt..end_cnt).each do |id|
-        begin
-            if db.post_exists? id
-                puts "Skipping Post #{id}"
-                next
+    threads = (0...thread_cnt).map do |offset|
+        Thread.new do
+            ((start_cnt + offset)..end_cnt).step(thread_cnt) do |id|
+                begin
+                    if db.post_exists? id
+                        print "Skipping Post #{id}\n"
+                        next
+                    end
+                    post = download_post(id)
+                    db.save_post(post)
+                    print "Saved Post #{id}\n"
+                rescue => error
+                    print "Error Downloading/Saving Post #{id}: #{error.to_s.lines.first}\n"
+                end
             end
-            post = download_post(id)
-            db.save_post(post)
-            puts "Saved Post #{id}"
-        rescue => error
-            puts "Error Downloading/Saving Post #{id}: #{error.to_s.lines.first}"
         end
     end
+    threads.map(&:join)
 end
 
 task :generate do # rake generate count=3
