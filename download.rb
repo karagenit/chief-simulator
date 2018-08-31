@@ -11,10 +11,12 @@ db = Database.new
       puts "Skipping Post #{id}"
       next
     end
+    # TODO: add timeout to downloading?
     post = download_post(id)
     db.save_post(post)
     puts "Saved Post #{id}"
   rescue => error
+    # TODO: still enter into DB with null message?
     puts "Error Downloading/Saving Post #{id}: #{error.to_s.lines.first}"
   end
 end
