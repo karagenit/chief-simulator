@@ -30,6 +30,10 @@ class Database
   def get_post(post_id)
   end
 
+  def post_exists?(post_id)
+    @db.execute("SELECT EXISTS ( SELECT 1 FROM posts WHERE id=? )", [post_id]) == [[1]]
+  end
+
   def get_post_contents
     @db.execute "select text from posts"
   end
