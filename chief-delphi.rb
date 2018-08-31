@@ -4,7 +4,7 @@ require 'nokogiri'
 class Post
   attr_reader :id, :text, :created, :thread_id, :user_id, :forum_id
 
-  def initialize(id, text, created, thread_id, user_id, forum_id)
+  def initialize(id, text, created = nil, thread_id = nil, user_id = nil, forum_id = nil)
     @id = id
     @text = text
     @created = created
@@ -22,6 +22,6 @@ def download_post(post_id)
   message.css('br').remove
   text = message.text
   text.gsub!(/\s+/, ' ')
-  text
+  Post.new(post_id, text)
 end
 
