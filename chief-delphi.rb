@@ -14,6 +14,7 @@ class Post
   end
 end
 
+# TODO: fetch user, forum, thread
 def download_post(post_id)
   doc = Nokogiri::HTML(open("https://www.chiefdelphi.com/forums/showpost.php?p=#{post_id}"))
   message = doc.at_css("[id=\"post_message_#{post_id}\"]")
