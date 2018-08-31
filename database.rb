@@ -20,7 +20,8 @@ class Database
     SQL
   end
 
-  def get_last_post
+  def get_last_id
+    @db.execute("SELECT MAX(ID) FROM posts")[0][0]
   end
 
   def save_post(post)

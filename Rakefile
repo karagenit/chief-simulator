@@ -23,22 +23,20 @@ task :dump_db do
 end
 
 task :download do
-    start = (ENV['start'] || 1509124).to_i
-    end_cnt = (ENV['end'] || 1800000).to_i
     db = Database.new
+    start_cnt = (ENV['start'] || (db.get_last_id + 1)).to_i
+    end_cnt = (ENV['end'] || 1800000).to_i
 
-    (start..end_cnt).each do |id|
+    (start_cnt..end_cnt).each do |id|
         begin
             if db.post_exists? id
                 puts "Skipping Post #{id}"
                 next
             end
-            # TODO: add timeout to downloading?
             post = download_post(id)
             db.save_post(post)
             puts "Saved Post #{id}"
         rescue => error
-            # TODO: still enter into DB with null message?
             puts "Error Downloading/Saving Post #{id}: #{error.to_s.lines.first}"
         end
     end
