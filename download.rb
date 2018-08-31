@@ -5,16 +5,12 @@ require 'chief-delphi'
 
 db = Database.new
 
-last_id = db.get_last_post
-id = last_id.to_i + 1
-
-loop do
+(1500000..1800000).each do |id|
   begin
     post = download_post(id)
     db.save_post(post)
-  rescue
-    puts "Error Downloading/Saving Post #{id}"
+  rescue => error
+    puts "Error Downloading/Saving Post #{id}: #{error.lines.first}"
   end
-  id += 1
 end
 
