@@ -15,6 +15,9 @@ class Database
   end
 
   def delete
+    @db.execute <<-SQL
+      DROP TABLE IF EXISTS posts
+    SQL
   end
 
   def get_last_post
