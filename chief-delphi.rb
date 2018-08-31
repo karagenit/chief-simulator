@@ -18,11 +18,12 @@ end
 def download_post(post_id)
   doc = Nokogiri::HTML(open("https://www.chiefdelphi.com/forums/showpost.php?p=#{post_id}"))
   message = doc.at_css("[id=\"post_message_#{post_id}\"]")
+  raise ArgumentError.new("Invalid Post ID: #{post_id}") if message.nil?
   message.css('table').remove
   message.css('div').remove
   message.css('br').remove
-  text = message.text
-  text.gsub!(/\s+/, ' ')
-  Post.new(post_id, text)
+  message = message.text
+  message.gsub!(/\s+/, ' ')
+  Post.new(post_id, message)
 end
 
