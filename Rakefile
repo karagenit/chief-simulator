@@ -21,16 +21,12 @@ task :dump_db do
     end
 end
 
-task :train do
-    file = ENV['file'] || 'model.json' # set via 'rake train file=name'
+task :generate do # rake generate count=3
+    num = ENV['count'] || 5
     chain = MarkovPolo::Chain.new
     db = Database.new
     db.get_post_contents.each { |post| chain.push post[0] }
-    File.write(file, chain.to_h.to_json)
-end
-
-task :generate do
-    file = ENV['file'] || 'model.json'
-    chain = MarkovPolo::Chain.new(JSON.parse(File.read(file)))
-    puts chain.generate
+    num.times do
+        puts chain.generate
+    end
 end
