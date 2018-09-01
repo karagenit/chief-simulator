@@ -50,7 +50,8 @@ end
 
 task :generate do # rake generate count=3
     num = (ENV['count'] || 5).to_i
-    chain = MarkyMarkov::TemporaryDictionary.new(3)
+    depth = (ENV['depth'] || 3).to_i
+    chain = MarkyMarkov::TemporaryDictionary.new(depth)
     db = Database.new
     db.get_post_contents.each { |post| chain.parse_string post[0] }
     num.times do
